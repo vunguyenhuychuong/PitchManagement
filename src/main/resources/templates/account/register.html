@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<head th:replace="layout/header :: html_head">
+    <title>Title</title>
+</head>
+<body>
+<!-- Navigation-->
+<nav th:replace="layout/navbar-carosel :: navbar"/>
+
+<!-- Content-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 col-xl-9 mx-auto">
+            <div class="card flex-row my-5 border-0 shadow rounded-3 overflow-hidden">
+                <div class="card-img-left d-none d-md-flex">
+                    <!-- Background image for card set in CSS! -->
+                </div>
+                <div class="card-body p-4 p-sm-5">
+                    <div id="error"></div>
+                    <h5 class="card-title text-center mb-5 fw-light fs-5">Đăng ký</h5>
+                    <form class="needs-validation" method="post" novalidate th:action="@{/account/register}">
+                        <div class="form-floating mb-3">
+                            <input autofocus class="form-control" id="floatingInputUsername" name="userName"
+                                   required th:value="${userName}" type="text">
+                            <label for="floatingInputUsername">Tên đăng nhập</label>
+                            <div class="invalid-feedback">
+                                Vui lòng nhập tên đăng nhập.
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="floatingInputEmail"
+                                   name="email" oninput="setEmailError()"
+                                   required th:value="${email}" type="email">
+                            <label for="floatingInputEmail">Email</label>
+                            <div class="invalid-feedback">
+                                Vui lòng nhập email.
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-floating mb-3">
+                            <input autofocus class="form-control" id="floatingPassword"
+                                   name="password" placeholder="Password"
+                                   required th:value="${password}" type="password">
+                            <label for="floatingPassword">Mật khẩu</label>
+                            <div class="invalid-feedback">
+                                Vui lòng nhập mật khẩu.
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input autofocus class="form-control" id="floatingPasswordConfirmation"
+                                   name="confirmPassword"
+                                   oninput="checkPassword()" placeholder="Confirm Password"
+                                   required th:value="${confirmPassword}" type="password">
+                            <label for="floatingPasswordConfirmation">Xác nhận mật khẩu</label>
+                            <div class="invalid-feedback" id="repeatedPasswordError">
+                                Vui lòng nhập xác nhận mật khẩu.
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-floating mb-3">
+                            <input autofocus class="form-control" id="floatingInputFullName" name="fullname"
+                                   required th:value="${fullname}" type="text">
+                            <label for="floatingInputFullName">Họ và tên</label>
+                            <div class="invalid-feedback">
+                                Vui lòng nhập họ và tên.
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input autofocus class="form-control" id="floatingInputPhone" maxlength="10"
+                                   minlength="10" name="phone" required th:value="${phone}" type="text">
+                            <label for="floatingInputPhone">Điện thoại</label>
+                            <div class="invalid-feedback">
+                                Vui lòng nhập số điện thoại.
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <select aria-label="Floating label select example" class="form-select"
+                                    id="floatingSelectDistrict"
+                                    name="districtID" onchange="setWard()"
+                                    required>
+                                <option disabled selected value="">Quận</option>
+                                <option th:each="d : ${listDistricts}" th:text="${d.districtName}"
+                                        th:value="${d.districtId}"></option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn quận.
+                            </div>
+                            <label for="floatingSelectDistrict">Quận:</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <select aria-label="Floating label select example" class="form-select"
+                                    id="floatingSelectWard"
+                                    name="ward" required="">
+                                <option disabled selected value="">Phường</option>
+                                <option th:each="w : ${listWards}" th:text="${w.wardName}"
+                                        th:value="${w.wardId}"></option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn phường.
+                            </div>
+                            <label for="floatingSelectWard">Phường:</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input autofocus class="form-control" id="floatingInputAddress"
+                                   name="address"
+                                   required th:value="${address}" type="text">
+                            <label for="floatingInputAddress">Địa chỉ</label>
+                            <div class="invalid-feedback">
+                                Vui lòng nhập địa chỉ.
+                            </div>
+                        </div>
+
+                        <div class="d-grid mb-2">
+                            <button class="btn btn-lg btn-primary btn-login fw-bold text-uppercase" type="submit">Đăng
+                                ký
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer-->
+<footer th:replace="layout/footer :: html_footer"/>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core theme JS-->
+<script src="../js/scripts.js"></script>
+
+<!-- JS code-->
+<script>
+
+(function () {
+  "use strict";
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  var forms = document.querySelectorAll(".needs-validation");
+
+  // Loop over them and prevent submission
+  Array.prototype.slice.call(forms).forEach(function (form) {
+    form.addEventListener(
+      "submit",
+      function (event) {
+        var password = document.getElementById("floatingPassword").value;
+        var repeatedPassword = document.getElementById(
+          "floatingPasswordConfirmation"
+        ).value;
+        var email = document.getElementById("floatingInputEmail").value;
+
+        var isPasswordMatch =
+          repeatedPassword !== "" && password === repeatedPassword;
+        var error = checkDuplicatedEmail(email);
+
+        if (!form.checkValidity() || isPasswordMatch !== true || error !== "") {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add("was-validated");
+      },
+      false
+    );
+  });
+})();
+
+function setWard() {
+    var selectBox = document.getElementById("floatingSelectDistrict");
+    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+    $.ajax({
+        url: "http://localhost:8080/account/district/" + selectedValue,
+        type: 'get',
+        contentType: "text/plain; charset=utf-8",
+        success: function (responseData) {
+            document.getElementById("floatingSelectWard").innerHTML
+                    = responseData;
+        }
+    });
+}
+
+function checkPassword() {
+  var password = document.getElementById("floatingPassword").value;
+  var repeatedPassword = document.getElementById(
+    "floatingPasswordConfirmation"
+  ).value;
+  var email = document.getElementById("floatingInputEmail").value;
+  var error = checkDuplicatedEmail(email);
+
+  var isPasswordMatch =
+    repeatedPassword !== "" && password === repeatedPassword;
+
+  if (repeatedPassword === "") {
+    if (error !== "") {
+      document.getElementById("error").innerHTML = error;
+    } else {
+      let newHtml = "";
+      document.getElementById("error").innerHTML = newHtml;
+    }
+  } else if (isPasswordMatch !== true) {
+    let newHtml = "";
+    newHtml +=
+      "<div class='alert alert-danger alert-dismissible fade show mb-5' role='alert'>";
+    newHtml +=
+      "<svg class='bi flex-shrink-0 me-2' width='24' height='24' role='img' aria-label='Danger:'><use xlink:href='#exclamation-triangle-fill'/></svg>";
+    newHtml += "<strong>Lỗi!</strong> Xác thực mật khẩu không chính xác.";
+    newHtml +=
+      "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>";
+    newHtml += "</div>";
+    document.getElementById("error").innerHTML = newHtml;
+  } else {
+    if (error !== "") {
+      document.getElementById("error").innerHTML = error;
+    } else {
+      let newHtml = "";
+      document.getElementById("error").innerHTML = newHtml;
+    }
+  }
+}
+
+function checkDuplicatedEmail(email) {
+  let result = "";
+  $.ajax({
+    url: "http://localhost:8080/account/email?email=" + email,
+    type: "get",
+    contentType: "text/plain; charset=utf-8",
+    async: false,
+    success: function (responseData) {
+      result += responseData;
+      console.log(result);
+    },
+  });
+  return result;
+}
+
+function setEmailError() {
+  var email = document.getElementById("floatingInputEmail").value;
+  var error = checkDuplicatedEmail(email);
+  if (error !== "") {
+    document.getElementById("error").innerHTML = error;
+  }else{
+    error = ""
+    document.getElementById("error").innerHTML = error;
+  }
+}
+
+
+
+
+</script>
+
+</body>
+</html>
