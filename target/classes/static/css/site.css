@@ -1,0 +1,11 @@
+.card-img-left {
+    width: 45%;
+    background: scroll center url('../img/ronaldo.jpg');
+    background-size: cover;
+}
+
+body{
+    background-color: coral;
+    margin: 0px;
+    padding: 0px;
+}
