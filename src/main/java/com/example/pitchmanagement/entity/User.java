@@ -58,7 +58,7 @@ public class User {
     private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ward_id", nullable = false)
+    @JoinColumn(name = "ward_id")
     private Ward ward;
 
     @Override

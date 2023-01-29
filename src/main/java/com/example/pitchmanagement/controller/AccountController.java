@@ -6,9 +6,17 @@ import com.example.pitchmanagement.service.DistrictService;
 import com.example.pitchmanagement.service.RoleService;
 import com.example.pitchmanagement.service.UserService;
 import com.example.pitchmanagement.service.WardService;
+import com.example.pitchmanagement.utils.GooglePojo;
+import com.example.pitchmanagement.utils.GoogleUtils;
 import com.example.pitchmanagement.utils.IdGeneration;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
+import org.apache.http.client.ClientProtocolException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +43,8 @@ public class AccountController {
     private final RoleService roleService;
 
     private final IdGeneration idGeneration;
-
+    @Autowired
+    private GoogleUtils googleUtils;
     @GetMapping(value = {"/register"})
     public String registerPage(Model model) {
         model.addAttribute("listDistricts", districtService.getAllDistricts());
@@ -121,5 +130,40 @@ public class AccountController {
         } catch (IOException exception) {
             log.error(exception.getMessage());
         }
+    }
+    @RequestMapping("/login-google")
+    public String loginGoogle(HttpServletRequest request) throws ClientProtocolException, IOException {
+        String code = request.getParameter("code");
+
+        if (code == null || code.isEmpty()) {
+            return "redirect:/login?message=google_error";
+        }
+        String accessToken = googleUtils.getToken(code);
+
+        GooglePojo googlePojo = googleUtils.getUserInfo(accessToken);
+        UserDetails userDetail = googleUtils.buildUser(googlePojo);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail, null,
+                userDetail.getAuthorities());
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        if (userService.findUserByEmail(googlePojo.getEmail()) == null){
+            User user = User.builder()
+                    .email(googlePojo.getEmail())
+                    .password("")
+                    .userName(googlePojo.getEmail())
+                    .districtId("1")
+                    .ward(wardService.getWardById("1"))
+                    .phone("")
+                    .fullName("")
+                    .memberAddress("")
+                    .imgLink(googlePojo.getPicture())
+                    .memberId(idGeneration.raiseUserId(userService.getUserList()))
+                    .memberStatus(true)
+                    .ownerStatus(false)
+                    .role(roleService.findRoleById("US"))
+                    .build();
+            userService.createAccount(user);
+        }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return "redirect:/home";
     }
 }
