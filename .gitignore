@@ -21,3 +21,9 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+.idea/compiler.xml
+target/classes/static/mail/jqBootstrapValidation.min.js
+target/classes/static/css/style.css
+target/classes/static/css/style.min.css
+target/classes/static/js/main.js
+target/classes/static/mail/contact.js
