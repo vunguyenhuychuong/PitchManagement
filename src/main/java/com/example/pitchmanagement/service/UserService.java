@@ -12,4 +12,7 @@ public interface UserService {
     User findUserById(String id);
 
     List<User> getUserList();
+
+    User findUserByName(String userName);
+    User findUserByPassword(String password);
 }
