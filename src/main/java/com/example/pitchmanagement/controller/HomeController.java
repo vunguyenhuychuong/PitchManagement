@@ -10,4 +10,5 @@ public class HomeController {
     public String HomePage() {
         return "home/index.html";
     }
+
 }

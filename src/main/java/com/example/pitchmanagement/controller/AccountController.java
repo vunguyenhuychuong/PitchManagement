@@ -45,12 +45,13 @@ public class AccountController {
     private final IdGeneration idGeneration;
     @Autowired
     private GoogleUtils googleUtils;
+
     @GetMapping(value = {"/register"})
     public String registerPage(Model model) {
         model.addAttribute("listDistricts", districtService.getAllDistricts());
         return "account/register.html";
-    }
 
+    }
     @PostMapping(value = {"/register"})
     public RedirectView register(Model model, final HttpServletRequest request, final HttpServletResponse response) {
         try {
@@ -165,5 +166,34 @@ public class AccountController {
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return "redirect:/home";
+    }
+    @GetMapping(value = "/login")
+
+    public String loginPage(final HttpServletRequest request, final HttpServletResponse response) {
+        request.getSession().setAttribute("message", "");
+        return "account/login.html";
+    }
+    @PostMapping("/login")
+    public String loginPage(Model model, final HttpServletRequest request, final HttpServletResponse response) {
+        try {
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html; charset=UTF-8");
+            User user = userService.findUserByName(request.getParameter("username"));
+            User password = userService.findUserByPassword(request.getParameter("password"));
+            if (user != null  && password != null) {
+                request.getSession().setAttribute("user", user);
+                request.getSession().setAttribute("message", "");
+
+                return "/home/index.html";
+            }
+
+
+        } catch (Exception exception) {
+            log.error(exception.getMessage());
+        }
+        request.getSession().setAttribute("message", "Invalid username or password");
+        return "account/login";
+
     }
 }
