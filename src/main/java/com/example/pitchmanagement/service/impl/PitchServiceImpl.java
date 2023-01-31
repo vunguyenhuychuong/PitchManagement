@@ -16,27 +16,26 @@ import java.util.List;
 @Component
 public class PitchServiceImpl implements PitchService {
 
+    public static final int PITCHS_PER_PAGE=12;
     @Autowired
     private PitchRepository repo;
+
     @Override
-    public List<Pitch> getAll() {
-        return repo.findAll();
+    public List<Pitch> listAll() {
+        return (List<Pitch>) repo.findAll();
     }
 
     @Override
-    public Page<Pitch> paginatedPitch(Pageable pageable) {
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        List<Pitch> listPitch = getAll();
-        List<Pitch> listPaging;
-        if(listPitch.size() < startItem){
-            listPaging = Collections.emptyList();
-        }else{
-            int toIndex = Math.min(startItem + pageSize, listPitch.size());
-            listPaging = listPitch.subList(startItem, toIndex);
+    public Page<Pitch> listByPage(int pageNum, String keyword) {
+
+        Pageable pageable = PageRequest.of(pageNum - 1, PITCHS_PER_PAGE);
+
+        if(keyword != null)
+        {
+            return repo.findAll(keyword, pageable);
         }
-        Page<Pitch> pitchPage = new PageImpl<Pitch>(listPaging, PageRequest.of(currentPage, pageSize), listPitch.size());
-        return pitchPage;
+        return repo.findAll(pageable);
     }
+
+
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 @Service
 public interface PitchService {
-    List<Pitch> getAll();
-    Page<Pitch> paginatedPitch(Pageable pageable);
+    List<Pitch> listAll();
+
+    Page<Pitch> listByPage(int pageNum, String keyword);
 }
