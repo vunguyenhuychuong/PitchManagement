@@ -9,8 +9,8 @@ import com.example.pitchmanagement.service.WardService;
 import com.example.pitchmanagement.utils.GooglePojo;
 import com.example.pitchmanagement.utils.GoogleUtils;
 import com.example.pitchmanagement.utils.IdGeneration;
-import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -52,6 +52,7 @@ public class AccountController {
         return "account/register.html";
 
     }
+
     @PostMapping(value = {"/register"})
     public RedirectView register(Model model, final HttpServletRequest request, final HttpServletResponse response) {
         try {
@@ -132,8 +133,9 @@ public class AccountController {
             log.error(exception.getMessage());
         }
     }
+
     @RequestMapping("/login-google")
-    public String loginGoogle(HttpServletRequest request) throws ClientProtocolException, IOException {
+    public String loginGoogle(final HttpServletRequest request) throws ClientProtocolException, IOException {
         String code = request.getParameter("code");
 
         if (code == null || code.isEmpty()) {
@@ -146,53 +148,61 @@ public class AccountController {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail, null,
                 userDetail.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        if (userService.findUserByEmail(googlePojo.getEmail()) == null){
-            User user = User.builder()
-                    .email(googlePojo.getEmail())
-                    .password("")
-                    .userName(googlePojo.getEmail())
-                    .districtId("1")
-                    .ward(wardService.getWardById("1"))
-                    .phone("")
-                    .fullName("")
-                    .memberAddress("")
-                    .imgLink(googlePojo.getPicture())
-                    .memberId(idGeneration.raiseUserId(userService.getUserList()))
-                    .memberStatus(true)
-                    .ownerStatus(false)
-                    .role(roleService.findRoleById("US"))
-                    .build();
+
+        User user = User.builder()
+                .email(googlePojo.getEmail())
+                .password("")
+                .userName(googlePojo.getEmail())
+                .districtId("1")
+                .ward(wardService.getWardById("1"))
+                .phone("")
+                .fullName("")
+                .memberAddress("")
+                .imgLink(googlePojo.getPicture())
+                .memberId(idGeneration.raiseUserId(userService.getUserList()))
+                .memberStatus(true)
+                .ownerStatus(false)
+                .role(roleService.findRoleById("US"))
+                .build();
+
+        if (userService.findUserByEmail(googlePojo.getEmail()) == null) {
             userService.createAccount(user);
         }
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        request.getSession().setAttribute("user", user);
         return "redirect:/home";
     }
+
     @GetMapping(value = "/login")
 
     public String loginPage(final HttpServletRequest request, final HttpServletResponse response) {
-        request.getSession().setAttribute("message", "");
+        request.getSession().setAttribute("message", null);
         return "account/login.html";
     }
+
     @PostMapping("/login")
     public String loginPage(Model model, final HttpServletRequest request, final HttpServletResponse response) {
         try {
             request.setCharacterEncoding("UTF-8");
             response.setCharacterEncoding("UTF-8");
             response.setContentType("text/html; charset=UTF-8");
+
             User user = userService.findUserByName(request.getParameter("username"));
             User password = userService.findUserByPassword(request.getParameter("password"));
-            if (user != null  && password != null) {
+
+            if (user != null && password != null) {
                 request.getSession().setAttribute("user", user);
-                request.getSession().setAttribute("message", "");
+                request.getSession().setAttribute("message", null);
 
-                return "/home/index.html";
+                return "redirect:/home";
+            } else {
+                request.getSession().setAttribute("message", "Invalid username or password");
             }
-
-
         } catch (Exception exception) {
             log.error(exception.getMessage());
         }
-        request.getSession().setAttribute("message", "Invalid username or password");
+
         return "account/login";
 
     }
