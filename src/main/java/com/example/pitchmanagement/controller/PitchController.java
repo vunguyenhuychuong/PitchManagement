@@ -28,8 +28,7 @@ public class PitchController {
 //    }
 
     @GetMapping("/home")
-    public String listFirstPage(Model model)
-    {
+    public String listFirstPage(Model model) {
         return listByPage(1, model, null);
     }
 
@@ -41,7 +40,7 @@ public class PitchController {
 
         long startCount = (pageNum - 1) * PitchServiceImpl.PITCHS_PER_PAGE + 1;
         long endCount = startCount + PitchServiceImpl.PITCHS_PER_PAGE - 1;
-        if(endCount > page.getTotalElements()) {
+        if (endCount > page.getTotalElements()) {
             endCount = page.getTotalElements();
         }
 
@@ -53,6 +52,6 @@ public class PitchController {
         model.addAttribute("listPitchs", listPitchs);
         model.addAttribute("keyword", keyword);
 
-        return "home/index";
-     }
+        return "home/index.html";
+    }
 }

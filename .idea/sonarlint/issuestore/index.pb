@@ -1,6 +1,4 @@
 
-9
-	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 v
@@ -13,7 +11,5 @@ r
 Bsrc/main/java/com/example/pitchmanagement/service/WardService.java,6\7\67a153250278e86988a739f6620d540094fa72d1
 j
 :src/main/java/com/example/pitchmanagement/entity/Ward.java,d\f\df2a7e8c942082c2fc219305d7b74548e1dbb11c
-j
-:src/main/java/com/example/pitchmanagement/entity/User.java,5\8\58f2f17455f3766ffdc9ad21de55b8e3652d635d
 r
 Bsrc/main/java/com/example/pitchmanagement/service/RoleService.java,3\2\328867be8ba0a4da937542f919f55224101ef715
