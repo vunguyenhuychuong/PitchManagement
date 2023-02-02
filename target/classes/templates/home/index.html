@@ -9,18 +9,18 @@
     <div th:replace="layout/navbar-carosel :: carosel"/>
 </header>
 <!-- Section-->
-<section class="py-5">
-    <div>
-        <form class="form-inline m-3" th:action="@{/home/page/1}">
-            Filter:&nbsp;
-            <input name="keyword" required th:value="${keyword}" type="search"/>
-            &nbsp;&nbsp;
-            <input class="btn btn-primary" type="submit" value="Search"/>
-            &nbsp;&nbsp;
-            <input class="btn btn-secondary" type="button" value="Clear"/>
-        </form>
+<section class="container-fluid py-5">
+    <div class="col-lg-4 col-4 text-left">
+        <div class="input-group mb-5" th:action="@{/home/page/1}">
+            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon"
+                   name="keyword" required th:value="${keyword}"/>
+            <button type="button" class="btn btn-outline-primary" value="Clear">search</button>
+        </div>
     </div>
     &nbsp;
+    <div class="text-center mb-4">
+        <h2 class="section-title px-5"><span class="px-2">Trandy Pitchs</span></h2>
+    </div>
     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4">
         <div class="col mb-5" th:each="pitch : ${listPitchs}" th:object="${pitch}">
             <div class="card h-100">
@@ -52,10 +52,9 @@
     <div class="text-center m-1" th:unless="${totalItems > 0 }">
         <span>No Pitchs found</span>
     </div>
-
     <div>
         <nav>
-            <ul class="pagination justify-content-center">
+            <ul class="pagination justify-content-center ">
                 <li class="page-item">
                     <a class="page-link" th:href="@{/home/page/1}">First</a>
                 </li>
@@ -64,7 +63,7 @@
                 </li>
                 <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
                     th:each="i : ${#numbers.sequence(1, totalPage)}">
-                    <a class="page-link" th:href="@{'/home/page/' + ${i}}">[[${i}]]</a>
+                    <a class="page-link is-active"  th:href="@{'/home/page/' + ${i}}">[[${i}]]</a>
                 </li>
                 <li th:class="${currentPage < totalPage ? 'page-item' : 'page-item disabled'}">
                     <a class="page-link" th:href="@{'/home/page/' + ${currentPage + 1}}">Next</a>
@@ -75,6 +74,7 @@
             </ul>
         </nav>
     </div>
+
 </section>
 <!-- Footer-->
 <footer th:replace="layout/footer :: html_footer"/>
