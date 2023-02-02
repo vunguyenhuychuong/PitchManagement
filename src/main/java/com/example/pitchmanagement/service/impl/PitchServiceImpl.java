@@ -5,12 +5,10 @@ import com.example.pitchmanagement.repository.PitchRepository;
 import com.example.pitchmanagement.service.PitchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -22,7 +20,7 @@ public class PitchServiceImpl implements PitchService {
 
     @Override
     public List<Pitch> listAll() {
-        return (List<Pitch>) repo.findAll();
+        return repo.findAll();
     }
 
     @Override
@@ -35,6 +33,12 @@ public class PitchServiceImpl implements PitchService {
             return repo.findAll(keyword, pageable);
         }
         return repo.findAll(pageable);
+    }
+
+    @Override
+    public List<Pitch> listAllByEstimation() {
+        List<Pitch> listPitch = repo.findAllByEstimation();
+        return listPitch;
     }
 
 

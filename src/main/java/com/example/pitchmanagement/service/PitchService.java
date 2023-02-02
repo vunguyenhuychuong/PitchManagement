@@ -12,4 +12,6 @@ public interface PitchService {
     List<Pitch> listAll();
 
     Page<Pitch> listByPage(int pageNum, String keyword);
+
+    List<Pitch> listAllByEstimation();
 }
