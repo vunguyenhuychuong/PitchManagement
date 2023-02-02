@@ -19,14 +19,6 @@ public class PitchController {
     @Autowired
     private PitchService service;
 
-//    @GetMapping("/home")
-//    public String listAll(Model model)
-//    {
-//        List<Pitch> listPitchs = service.listAll();
-//        model.addAttribute("listPitchs", listPitchs);
-//        return "home/index";
-//    }
-
     @GetMapping("/home")
     public String listFirstPage(Model model) {
         return listByPage(1, model, null);
@@ -37,6 +29,7 @@ public class PitchController {
                              @Param("keyword") String keyword) {
         Page<Pitch> page = service.listByPage(pageNum, keyword);
         List<Pitch> listPitchs = page.getContent();
+        List<Pitch> listPitchByEstimation = service.listAllByEstimation();
 
         long startCount = (pageNum - 1) * PitchServiceImpl.PITCHS_PER_PAGE + 1;
         long endCount = startCount + PitchServiceImpl.PITCHS_PER_PAGE - 1;
@@ -51,7 +44,16 @@ public class PitchController {
         model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute("listPitchs", listPitchs);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("listPitchEstimation", listPitchByEstimation);
 
         return "home/index.html";
     }
+
+//    @GetMapping(value = "home/")
+//    public String listByEstimation (Model model) {
+//        List<Pitch> listPitchByEstimation = service.listAllByEstimation();
+//        model.addAttribute("listPitchEstimation", listPitchByEstimation);
+//        return "home/index.html";
+//    }
+
 }
