@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class PitchServiceImpl implements PitchService {
 
-    public static final int PITCHS_PER_PAGE=12;
+    public static final int PITCHS_PER_PAGE = 12;
     @Autowired
     private PitchRepository repo;
 
@@ -28,8 +28,7 @@ public class PitchServiceImpl implements PitchService {
 
         Pageable pageable = PageRequest.of(pageNum - 1, PITCHS_PER_PAGE);
 
-        if(keyword != null)
-        {
+        if (keyword != null) {
             return repo.findAll(keyword, pageable);
         }
         return repo.findAll(pageable);
@@ -39,6 +38,12 @@ public class PitchServiceImpl implements PitchService {
     public List<Pitch> listAllByEstimation() {
         List<Pitch> listPitch = repo.findAllByEstimation();
         return listPitch;
+    }
+
+    @Override
+    public Page<Pitch> filteredPitch(String districtId, String wardId, int pageNum) {
+        Pageable pageable = PageRequest.of(pageNum - 1, 1);
+        return repo.filterPitch(districtId, wardId, pageable);
     }
 
 

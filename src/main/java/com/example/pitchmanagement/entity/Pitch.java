@@ -18,7 +18,7 @@ public class Pitch {
     @Column(name = "pitch_id")
     private String pitchID;
 
-//    @Column(name = "ward_id")
+    //    @Column(name = "ward_id")
 //    private String wardID;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ward_id", nullable = false)
@@ -48,8 +48,5 @@ public class Pitch {
 
     @Column(name = "pitch_status")
     private boolean status;
-
-
-
 
 }

@@ -2,7 +2,6 @@ package com.example.pitchmanagement.service;
 
 import com.example.pitchmanagement.entity.Pitch;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,4 +13,6 @@ public interface PitchService {
     Page<Pitch> listByPage(int pageNum, String keyword);
 
     List<Pitch> listAllByEstimation();
+
+    Page<Pitch> filteredPitch(String districtId, String wardId, int pageNum);
 }
