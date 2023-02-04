@@ -1,9 +1,11 @@
 package com.example.pitchmanagement.controller;
 
 import com.example.pitchmanagement.entity.Pitch;
+import com.example.pitchmanagement.service.DistrictService;
 import com.example.pitchmanagement.service.PitchService;
+import com.example.pitchmanagement.service.WardService;
 import com.example.pitchmanagement.service.impl.PitchServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -11,16 +13,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class PitchController {
 
-    @Autowired
-    private PitchService service;
+    private final DistrictService districtService;
+
+    private final WardService wardService;
+
+    private final PitchService service;
 
     @GetMapping("/home")
     public String listFirstPage(Model model) {
+        model.addAttribute("listDistricts", districtService.getAllDistricts());
         return listByPage(1, model, null);
     }
 
@@ -37,6 +45,7 @@ public class PitchController {
             endCount = page.getTotalElements();
         }
 
+        model.addAttribute("listDistricts", districtService.getAllDistricts());
         model.addAttribute("totalPage", page.getTotalPages());
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("startCount", startCount);
@@ -45,6 +54,38 @@ public class PitchController {
         model.addAttribute("listPitchs", listPitchs);
         model.addAttribute("keyword", keyword);
         model.addAttribute("listPitchEstimation", listPitchByEstimation);
+
+        return "home/index.html";
+    }
+
+    @GetMapping(value = "/home/page/{pageNum}/filter")
+    public String listByFilteredPage(Model model, final HttpServletRequest request,
+                                     @PathVariable(name = "pageNum", required = false) int pageNum) {
+        String districtID = request.getParameter("districtID");
+        String wardID = request.getParameter("ward");
+
+        Page<Pitch> page = service.filteredPitch(districtID, wardID, pageNum);
+        List<Pitch> listPitchs = page.getContent();
+        List<Pitch> listPitchByEstimation = service.listAllByEstimation();
+
+        long startCount = (pageNum - 1) * PitchServiceImpl.PITCHS_PER_PAGE + 1;
+        long endCount = startCount + PitchServiceImpl.PITCHS_PER_PAGE - 1;
+        if (endCount > page.getTotalElements()) {
+            endCount = page.getTotalElements();
+        }
+
+        model.addAttribute("listDistricts", districtService.getAllDistricts());
+        model.addAttribute("totalPage", page.getTotalPages());
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("listPitchs", listPitchs);
+        model.addAttribute("keyword", "");
+        model.addAttribute("listPitchEstimation", listPitchByEstimation);
+        model.addAttribute("listWards", wardService.getWardByDistrictId(districtID));
+        model.addAttribute("district", districtID);
+        model.addAttribute("ward", wardID);
 
         return "home/index.html";
     }

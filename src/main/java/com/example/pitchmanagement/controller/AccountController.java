@@ -105,7 +105,7 @@ public class AccountController {
 
             for (Ward ward : wardList) {
                 out.println("<input type=\"hidden\" name=\"districtID\" value=\"" + ward.getDistrict().getDistrictId() + "\"/>\n"
-                        + "                            <option value=\"" + ward.getWardId() + "\">" + ward.getWardName() + "</option>");
+                        + "                            <option data-tokens=\"ketchup mustard\" value=\"" + ward.getWardId() + "\">" + ward.getWardName() + "</option>");
             }
 
         } catch (IOException exception) {
@@ -207,10 +207,11 @@ public class AccountController {
         return "account/login";
 
     }
+
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
-        return "account/login";
+        return "redirect:/home";
     }
 }
