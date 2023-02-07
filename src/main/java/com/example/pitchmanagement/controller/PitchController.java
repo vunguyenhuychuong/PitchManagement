@@ -5,16 +5,21 @@ import com.example.pitchmanagement.service.DistrictService;
 import com.example.pitchmanagement.service.PitchService;
 import com.example.pitchmanagement.service.WardService;
 import com.example.pitchmanagement.service.impl.PitchServiceImpl;
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.groovy.util.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -88,6 +93,15 @@ public class PitchController {
         model.addAttribute("ward", wardID);
 
         return "home/index.html";
+    }
+
+    @GetMapping (value = "pitch/viewPitchDetail/{pitchID}")
+    public String viewPitchDetail(@PathVariable ("pitchID") String pitchID, Model model) {
+        System.out.println("Pitch ID: " + pitchID);
+        Pitch pitch = service.getPitchByPitchID(pitchID);
+        System.out.println();
+        model.addAttribute("pitch", pitch);
+        return "pitch/pitchDetail.html";
     }
 
 //    @GetMapping(value = "home/")

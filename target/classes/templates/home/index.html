@@ -42,7 +42,7 @@
                         <div class="card-text mb-4">40$ - 50$</div>
                         <!-- Pitch action-->
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Đặt sân</a></div>
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:href="@{'pitch/viewPitchDetail/' + ${pitch.pitchID}}">Đặt sân</a></div>
                         </div>
                     </div>
                 </div>
@@ -50,56 +50,56 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-1"></div>
-        <div class="col-4 mt-5 text-left">
-            <div class="input-group mt-5" th:action="@{/home/page/1}">
-                <input aria-describedby="search-addon" aria-label="Search" class="form-control rounded mt-5"
-                       name="keyword"
-                       placeholder="Search"
-                       required th:value="${keyword}" type="search"/>
-                <button class="btn btn-outline-primary mt-5" type="button" value="Clear">search</button>
-            </div>
-        </div>
+<!--    <div class="row">-->
+<!--        <div class="col-1"></div>-->
+<!--        <div class="col-4 mt-5 text-left">-->
+<!--            <div class="input-group mt-5" th:action="@{/home/page/1}">-->
+<!--                <input aria-describedby="search-addon" aria-label="Search" class="form-control rounded mt-5"-->
+<!--                       name="keyword"-->
+<!--                       placeholder="Search"-->
+<!--                       required th:value="${keyword}" type="search"/>-->
+<!--                <button class="btn btn-outline-primary mt-5" type="button" value="Clear">search</button>-->
+<!--            </div>-->
+<!--        </div>-->
 
-        <div class="col-1"></div>
+<!--        <div class="col-1"></div>-->
 
-        <form class="mt-3 row col-5 border-top border-bottom bg-light" method="get"
-              style="padding-top: 50px; padding-bottom: 35px" th:action="@{/home/page/1/filter}">
-            <h2 class="fw-bolder mb-4">Tìm kiếm sân</h2>
-            <div class="form-floating col-5" style="padding: 0px">
-                <select aria-label="Floating label select example" class="form-select"
-                        id="floatingSelectDistrict"
-                        name="districtID" onchange="setWard()"
-                        required>
-                    <option disabled selected value="">Quận</option>
-                    <option th:each="d : ${listDistricts}"
-                            th:selected="${district == d.districtId}"
-                            th:text="${d.districtName}"
-                            th:value="${d.districtId}"></option>
-                </select>
-                <label for="floatingSelectDistrict">Quận:</label>
-            </div>
+<!--        <form class="mt-3 row col-5 border-top border-bottom bg-light" method="get"-->
+<!--              style="padding-top: 50px; padding-bottom: 35px" th:action="@{/home/page/1/filter}">-->
+<!--            <h2 class="fw-bolder mb-4">Tìm kiếm sân</h2>-->
+<!--            <div class="form-floating col-5" style="padding: 0px">-->
+<!--                <select aria-label="Floating label select example" class="form-select"-->
+<!--                        id="floatingSelectDistrict"-->
+<!--                        name="districtID" onchange="setWard()"-->
+<!--                        required>-->
+<!--                    <option disabled selected value="">Quận</option>-->
+<!--                    <option th:each="d : ${listDistricts}"-->
+<!--                            th:selected="${district == d.districtId}"-->
+<!--                            th:text="${d.districtName}"-->
+<!--                            th:value="${d.districtId}"></option>-->
+<!--                </select>-->
+<!--                <label for="floatingSelectDistrict">Quận:</label>-->
+<!--            </div>-->
 
 
-            <div class="form-floating mb-3 col-5">
-                <select aria-label="Floating label select example" class="form-select"
-                        id="floatingSelectWard"
-                        name="ward" required="">
-                    <option disabled selected value="">Phường</option>
-                    <option th:each="w : ${listWards}"
-                            th:selected="${ward == w.wardId}"
-                            th:text="${w.wardName}"
-                            th:value="${w.wardId}"></option>
-                </select>
-                <label for="floatingSelectWard">Phường:</label>
-            </div>
-            <button class="btn btn-lg btn-outline-success col-2" style="height: 60px; font-size: 12px" type="submit"><i
-                    class="bi bi-search"></i> Tìm kiếm
-            </button>
-        </form>
-        <div class="col-1"></div>
-    </div>
+<!--            <div class="form-floating mb-3 col-5">-->
+<!--                <select aria-label="Floating label select example" class="form-select"-->
+<!--                        id="floatingSelectWard"-->
+<!--                        name="ward" required="">-->
+<!--                    <option disabled selected value="">Phường</option>-->
+<!--                    <option th:each="w : ${listWards}"-->
+<!--                            th:selected="${ward == w.wardId}"-->
+<!--                            th:text="${w.wardName}"-->
+<!--                            th:value="${w.wardId}"></option>-->
+<!--                </select>-->
+<!--                <label for="floatingSelectWard">Phường:</label>-->
+<!--            </div>-->
+<!--            <button class="btn btn-lg btn-outline-success col-2" style="height: 60px; font-size: 12px" type="submit"><i-->
+<!--                    class="bi bi-search"></i> Tìm kiếm-->
+<!--            </button>-->
+<!--        </form>-->
+<!--        <div class="col-1"></div>-->
+<!--    </div>-->
 
     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 mt-5">
         <div class="col mb-5" th:each="pitch : ${listPitchs}" th:object="${pitch}">
@@ -129,7 +129,7 @@
                         <div class="card-text mb-4">40$ - 50$</div>
                         <!-- Pitch action-->
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Đặt sân</a></div>
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:href="@{'pitch/viewPitchDetail/' + ${pitch.pitchID}}">Đặt sân</a></div>
                         </div>
                     </div>
                 </div>
