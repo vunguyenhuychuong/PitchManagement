@@ -14,5 +14,7 @@ public interface PitchService {
 
     List<Pitch> listAllByEstimation();
 
+    Pitch getPitchByPitchID(String pitchID);
+
     Page<Pitch> filteredPitch(String districtId, String wardId, int pageNum);
 }

@@ -41,6 +41,12 @@ public class PitchServiceImpl implements PitchService {
     }
 
     @Override
+    public Pitch getPitchByPitchID(String pitchID) {
+        Pitch pitch = repo.findPitchByPitchID(pitchID);
+        return pitch;
+    }
+
+    @Override
     public Page<Pitch> filteredPitch(String districtId, String wardId, int pageNum) {
         Pageable pageable = PageRequest.of(pageNum - 1, 1);
         return repo.filterPitch(districtId, wardId, pageable);
