@@ -1,6 +1,10 @@
 package com.example.pitchmanagement.controller;
 
+import com.example.pitchmanagement.entity.Child_Pitch;
+import com.example.pitchmanagement.entity.District;
+import com.example.pitchmanagement.entity.Ward;
 import com.example.pitchmanagement.entity.Pitch;
+import com.example.pitchmanagement.service.Child_PitchService;
 import com.example.pitchmanagement.service.DistrictService;
 import com.example.pitchmanagement.service.PitchService;
 import com.example.pitchmanagement.service.WardService;
@@ -30,6 +34,8 @@ public class PitchController {
     private final WardService wardService;
 
     private final PitchService service;
+
+    private final Child_PitchService childPitchService;
 
     @GetMapping("/home")
     public String listFirstPage(Model model) {
@@ -97,10 +103,16 @@ public class PitchController {
 
     @GetMapping (value = "pitch/viewPitchDetail/{pitchID}")
     public String viewPitchDetail(@PathVariable ("pitchID") String pitchID, Model model) {
-        System.out.println("Pitch ID: " + pitchID);
         Pitch pitch = service.getPitchByPitchID(pitchID);
-        System.out.println();
+        District district = districtService.getDistrictById(pitch.getDistrict().getDistrictId());
+        String pitchDistrict = district.getDistrictName();
+        Ward ward = wardService.getWardById(pitch.getWard().getWardId());
+        String pitchWard = ward.getWardName();
+        List<Child_Pitch> listChildPitch = childPitchService.listAllChildPitchByPitchID(pitchID);
         model.addAttribute("pitch", pitch);
+        model.addAttribute("listChildPitch", listChildPitch);
+        model.addAttribute("pitchDistrict", pitchDistrict);
+        model.addAttribute("pitchWard", pitchWard);
         return "pitch/pitchDetail.html";
     }
 

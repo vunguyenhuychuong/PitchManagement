@@ -19,7 +19,7 @@ public interface PitchRepository extends JpaRepository<Pitch, String> {
     @Query(value = "SELECT TOP(4) * FROM Pitch  WHERE estimation = 5 AND pitch_status = 1 order by NEWID()", nativeQuery = true)
     public List<Pitch> findAllByEstimation();
 
-    public Pitch findPitchByPitchID(String s);
+    public Pitch findPitchByPitchID(String pitchId);
 
     @Query("SELECT p FROM Pitch p WHERE p.district.districtId = ?1 AND p.ward.wardId = ?2 AND p.status = 1")
     public Page<Pitch> filterPitch(String districtId, String wardId, Pageable pageable);

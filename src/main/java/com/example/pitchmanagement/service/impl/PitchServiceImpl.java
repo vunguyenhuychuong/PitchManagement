@@ -51,6 +51,4 @@ public class PitchServiceImpl implements PitchService {
         Pageable pageable = PageRequest.of(pageNum - 1, 1);
         return repo.filterPitch(districtId, wardId, pageable);
     }
-
-
 }
