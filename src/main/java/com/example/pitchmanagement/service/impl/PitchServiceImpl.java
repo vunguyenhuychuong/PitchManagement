@@ -3,7 +3,6 @@ package com.example.pitchmanagement.service.impl;
 import com.example.pitchmanagement.entity.Pitch;
 import com.example.pitchmanagement.repository.PitchRepository;
 import com.example.pitchmanagement.service.PitchService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +14,11 @@ import java.util.List;
 public class PitchServiceImpl implements PitchService {
 
     public static final int PITCHS_PER_PAGE = 12;
-    @Autowired
-    private PitchRepository repo;
+    private final PitchRepository repo;
+
+    public PitchServiceImpl(PitchRepository repo) {
+        this.repo = repo;
+    }
 
     @Override
     public List<Pitch> listAll() {
