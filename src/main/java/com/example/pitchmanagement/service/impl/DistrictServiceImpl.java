@@ -20,4 +20,9 @@ public class DistrictServiceImpl implements DistrictService {
     public List<District> getAllDistricts() {
         return districtRepository.findAll();
     }
+
+    @Override
+    public District getDistrictById (String districtId) {
+        return districtRepository.findByDistrictId(districtId);
+    }
 }
